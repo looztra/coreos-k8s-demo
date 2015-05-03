@@ -1,4 +1,8 @@
 #!/bin/bash
+DROPLET_SIZE=${DROPLET_SIZE:=512mb}
+DROPLET_REGION=${DROPLET_REGION:=nyc3}
+DO_SSH_KEY_IDS=${DO_SSH_KEY_IDS:=}
+
 
 if [ -n "$1" ]; then
     DROPLET_NAME=$1
@@ -10,11 +14,11 @@ curl -X POST "https://api.digitalocean.com/v2/droplets" \
      -H "Content-Type: application/json" \
      -H "Authorization: Bearer $DO_TOKEN" \
      -d'{"name":"'"$DROPLET_NAME"'",
-         "region":"nyc3",
+         "region":"'"$DROPLET_REGION"'",
          "image":"coreos-stable",
-         "size":"512mb",
+         "size":"'"$DROPLET_SIZE"'",
          "private_networking":true,
-         "ssh_keys":[603313],
+         "ssh_keys":['"$DO_SSH_KEY_IDS"'],
          "user_data":
 "#cloud-config
 
@@ -27,7 +31,7 @@ coreos:
     peer-addr: $private_ipv4:7001
   fleet:
     public-ip: $private_ipv4        # used for fleetctl ssh command
-    metadata: region=nyc3,public_ip=$public_ipv4
+    metadata: region='"$DROPLET_REGION"',public_ip=$public_ipv4
   units:
     - name: etcd.service
       command: start
