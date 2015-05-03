@@ -1,12 +1,8 @@
 #!/bin/bash
+NAME_PREFIX=${NAME_PREFIX:=tcore0}
+NUM_OF_DROPLETS=${NUM_OF_DROPLETS:=2}
 set -x
 . environments
-
-if [ -z "$NUM_OF_DROPLETS" ]; then
-    NUM_OF_DROPLETS=2
-fi  
-
-NAME_PREFIX=tcore0
 
 for i in `seq $NUM_OF_DROPLETS`; do ./create_droplet.sh $NAME_PREFIX$i; done
 
@@ -20,8 +16,16 @@ for i in `seq $NUM_OF_DROPLETS`; do
         DROPLET_DETAILS=`./get_droplet.sh | jq '.droplets[] | select(.name == '\""$NAME_PREFIX$i"\"')'`
         DROPLET_STATUS=`echo $DROPLET_DETAILS | jq '.status' | sed 's/"//g'`
     done
-    PUBLIC_IP=`echo $DROPLET_DETAILS | jq '.networks.v4 | .[] | select(.type =="public") | .ip_address' | sed 's/"//g'`
     echo $PUBLIC_IP >>allhosts;
+    PUBLIC_IP=`echo $DROPLET_DETAILS | jq '.networks.v4 | .[] | select(.type =="public") | .ip_address' | sed 's/"//g'`
+done
+
+:> allhosts.priv
+for i in `seq $NUM_OF_DROPLETS`; do
+    DROPLET_DETAILS=""
+    DROPLET_DETAILS=`./get_droplet.sh | jq '.droplets[] | select(.name == '\""$NAME_PREFIX$i"\"')'`
+    PRIVATE_IP=`echo $DROPLET_DETAILS | jq '.networks.v4 | .[] | select(.type =="private") | .ip_address' | sed 's/"//g'`
+    echo $PRIVATE_IP >> allhosts.priv
 done
 
 # cleanup known hosts lists
