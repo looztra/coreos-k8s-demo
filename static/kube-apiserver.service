@@ -8,10 +8,17 @@ After=etcd.service
 After=docker.service
 
 [Service]
+EnvironmentFile=/etc/environment
 ExecStart=/opt/bin/kube-apiserver \
+--allow_privileged=true \
+--insecure_bind_address=0.0.0.0 \
+--insecure_port=8080 \
+--kubelet_https=true \
+--secure_port=6443 \
 --address=0.0.0.0 \
 --port=8080 \
 --etcd_servers=http://127.0.0.1:4001 \
+--public_address_override=${COREOS_PRIVATE_IPV4} \
 --portal_net=10.1.0.0/16 \
 --logtostderr=true
 ExecStartPost=-/bin/bash -c "until /usr/bin/curl http://127.0.0.1:8080; do echo \"waiting for API server to come online...\"; sleep 3; done"
