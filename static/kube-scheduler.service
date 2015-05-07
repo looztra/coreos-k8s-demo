@@ -10,7 +10,10 @@ After=docker.service
 After=kube-apiserver.service
 
 [Service]
-ExecStart=/opt/bin/kube-scheduler --master=127.0.0.1:8080 --logtostderr=true
+ExecStart=/opt/bin/kube-scheduler \
+--logtostderr=true \
+--v=0 \
+--master=127.0.0.1:8080
 Restart=on-failure
 RestartSec=5
 

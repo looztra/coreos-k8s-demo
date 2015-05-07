@@ -10,7 +10,11 @@ After=docker.service
 After=kube-apiserver.service
 
 [Service]
-ExecStart=/opt/bin/kube-controller-manager --master=127.0.0.1:8080 --machines=${MACHINES} --logtostderr=true
+ExecStart=/opt/bin/kube-controller-manager \
+--logtostderr=true \
+--v=0 \
+--master=127.0.0.1:8080 \
+--machines=${MACHINES}
 Restart=on-failure
 RestartSec=5
 

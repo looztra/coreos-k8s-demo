@@ -10,13 +10,14 @@ After=docker.service
 [Service]
 EnvironmentFile=/etc/environment
 ExecStart=/opt/bin/kubelet \
---address=${COREOS_PRIVATE_IPV4} \
---port=10250 \
+--logtostderr=true \
+--v=0 \
+--api_servers=http://${K8S_MASTER_PRIVATE_IP}:8080 \
+--address=0.0.0.0 \
 --hostname_override=${COREOS_PRIVATE_IPV4} \
---etcd_servers=http://127.0.0.1:4001 \
---logtostderr=true
-Restart=on-failure
-RestartSec=5
+--allow_privileged=true
+Restart=always
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target
