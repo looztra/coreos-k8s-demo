@@ -18,7 +18,7 @@ for i in `seq $NUM_OF_DROPLETS`; do
         sleep 15
         DROPLET_DETAILS=`./get_droplet.sh | jq '.droplets[] | select(.name == '\""$NAME_PREFIX$i"\"')'`
         DROPLET_STATUS=`echo $DROPLET_DETAILS | jq '.status' | sed 's/"//g'`
-        DROPLET_ID=`echo $DROPLET_DETAILS | jq '.id'
+        DROPLET_ID=`echo $DROPLET_DETAILS | jq '.id'`
     done
     PUBLIC_IP=`echo $DROPLET_DETAILS | jq '.networks.v4 | .[] | select(.type =="public") | .ip_address' | sed 's/"//g'`
     PRIVATE_IP=`echo $DROPLET_DETAILS | jq '.networks.v4 | .[] | select(.type =="private") | .ip_address' | sed 's/"//g'`
