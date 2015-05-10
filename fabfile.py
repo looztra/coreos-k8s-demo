@@ -61,6 +61,16 @@ def deploy_binaries():
     sudo('/opt/bin/get_k8s_binaries.sh')
 
 @task
+def setup_dns():
+    """ setup dns stuff: skydns + kube2sky """
+    sudo('mkdir -p /etc/dns_token')
+    sudo('mkdir -p /etc/kubernetes/dns')
+    put('./static/dns/*', '/etc/kubernetes/dns/', use_sudo=True, mirror_local_mode=True)
+    sudo('kubectl create -f /etc/kubernetes/dns/token-system-dns.yaml')
+    sudo('kubectl create -f /etc/kubernetes/dns/skydns-rc.yaml')
+    sudo('kubectl create -f /etc/kubernetes/dns/skydns-svc.yaml')
+
+@task
 def deploy_common_services():
     """ deploy common service files """
     put('./minion/*', '/etc/systemd/system', use_sudo=True)

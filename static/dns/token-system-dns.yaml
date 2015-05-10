@@ -1,0 +1,5 @@
+kind: Secret
+apiVersion: v1beta3
+type: Opaque
+metadata:
+  name: token-system-dns

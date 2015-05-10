@@ -15,7 +15,9 @@ ExecStart=/opt/bin/kubelet \
 --api_servers=http://${K8S_MASTER_PRIVATE_IP}:8080 \
 --address=0.0.0.0 \
 --hostname_override=${COREOS_PRIVATE_IPV4} \
---allow_privileged=true
+--allow_privileged=true \
+--cluster_dns=10.254.0.10 \
+--cluster_domain=kube.local
 Restart=always
 RestartSec=10
 
