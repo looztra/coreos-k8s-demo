@@ -66,7 +66,8 @@ def setup_dns():
     sudo('mkdir -p /etc/dns_token')
     sudo('mkdir -p /etc/kubernetes/dns')
     put('./static/dns/*', '/etc/kubernetes/dns/', use_sudo=True, mirror_local_mode=True)
-    sudo('kubectl create -f /etc/kubernetes/dns/token-system-dns.yaml')
+    with settings(warn_only=True):
+        sudo('kubectl create -f /etc/kubernetes/dns/token-system-dns.yaml')
     sudo('kubectl create -f /etc/kubernetes/dns/skydns-rc.yaml')
     sudo('kubectl create -f /etc/kubernetes/dns/skydns-svc.yaml')
 
