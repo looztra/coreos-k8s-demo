@@ -16,7 +16,7 @@ class SkipIfOfflineTask(Task):
 
     def run(self, *args, **kwargs):
         original_timeout = getdefaulttimeout()
-        setdefaulttimeout(3)
+        setdefaulttimeout(15)
         try:
             Transport((env.host, int(env.port)))
             return self.func(*args, **kwargs)
@@ -58,6 +58,7 @@ def deploy_binaries():
     put('./scripts/*', '/opt/bin', use_sudo=True, mirror_local_mode=True)
     sudo('chmod +x /opt/bin/get_k8s_binaries.sh')
     sudo('chmod +x /opt/bin/wupiao')
+    sudo('chmod +x /opt/bin/substitute_machines.sh')
     sudo('/opt/bin/get_k8s_binaries.sh')
 
 @task
