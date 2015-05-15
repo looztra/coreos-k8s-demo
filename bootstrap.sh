@@ -34,5 +34,6 @@ for h in `cat allhosts`; do ssh-keygen -f "$HOME/.ssh/known_hosts" -R $h; done
 # wait some time to make sure Droplets internally ready
 sleep 120
 fab set_hosts deploy_minion
-fab -H `head -1 allhosts` deploy_master start_minion_services setup_dns
-fab -H `tail -n +2 allhosts | awk '{print $1}' | paste -d, -s` start_minion_services
+fab -H `head -1 allhosts` deploy_master
+fab set_hosts start_minion_services
+fab -H `head -1 allhosts` setup_dns
