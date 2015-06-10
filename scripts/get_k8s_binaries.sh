@@ -1,5 +1,5 @@
 #!/bin/bash
-K8S_VERSION=${K8S_VERSION:=0.17.0}
+K8S_VERSION=${K8S_VERSION:=0.18.2}
 K8S_BIN_DIR=${K8S_BIN_DIR:=/opt/bin}
 
 
